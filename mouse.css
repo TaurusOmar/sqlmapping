@@ -1,0 +1,69 @@
+
+
+html {
+    cursor: url(2.png),auto
+}
+
+
+
+a,button {
+    cursor: url(1.png) 14 0,pointer
+}
+
+
+.nes-pointer {
+    cursor: url(1.png) 14 0,pointer
+}
+
+.tabs button {
+    cursor: url(1.png) 14 0,pointer
+}
+
+.form-group label {
+    cursor: url(1.png) 14 0,pointer
+}
+
+.copy-button {
+    cursor: url(1.png) 14 0,pointer
+}
+
+.form-group input[type="text"], .form-group input[type="number"], .form-group select {
+    cursor: url(1.png) 14 0,pointer
+}
+
+
+.nes-avatar {
+    width: 32px;
+    height: 32px
+}
+
+.nes-avatar.is-rounded {
+    border-radius: 50px
+}
+
+.nes-avatar.is-small {
+    width: 16px;
+    height: 16px
+}
+
+.nes-avatar.is-small.is-rounded {
+    border-radius: 50px
+}
+
+.nes-avatar.is-medium {
+    width: 48px;
+    height: 48px
+}
+
+.nes-avatar.is-medium.is-rounded {
+    border-radius: 50px
+}
+
+.nes-avatar.is-large {
+    width: 64px;
+    height: 64px
+}
+
+.nes-avatar.is-large.is-rounded {
+    border-radius: 50px
+}

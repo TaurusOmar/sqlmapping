@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLMapping | SQLMap Command Generator</title>
+
+    <!-- Meta Description for SEO -->
+    <meta name="description"
+        content="SQLMap Command Generator, SQLMap Cheat Sheet: Essential Flags and Commands for SQL Injection. Learn to exploit SQL injections with WAF bypass techniques.">
+
+    <!-- Meta Keywords for SEO -->
+    <meta name="keywords"
+        content="SQLMap Commands, Cheat Sheet, SQL Injection, WAF Bypass, SQLMap Commands, Cybersecurity, Pentesting">
+
+    <!-- Favicon Icon -->
+    <link rel="icon" href="ico.png" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mouse.css">
+
+    <!-- Open Graph Meta Tags for Social Media (Optional) -->
+    <meta property="og:title" content="SQLMap Command Generator">
+    <meta property="og:description"
+        content="SQLMap Cheat Sheet: Command Generator, Essential Flags and Commands for SQL Injection. Learn to exploit SQL injections with WAF bypass techniques.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com">
+    <meta property="og:image" content="https://yourwebsite.com/image.jpg">
+</head>
+
+<body>
+    <div class="container">
+
+        <h1 class="site-title">SQLMapping</h1>
+
+        <p class="download">
+            <a href="https://github.com/sqlmapproject/sqlmap" target="_blank" rel="noopener noreferrer">
+                <span class="download-text">Download SQLMap on</span>
+                <span class="github-link">GitHub</span>
+            </a>
+        </p>
+
+        <div class="language-selector">
+            <a href="es/" class="lang-link" title="Switch to Spanish">
+                <img src="es.png" alt="Spanish" class="flag-icon">
+            </a>
+            <a href="/" class="lang-link" title="Switch to English">
+                <img src="en.png" alt="English" class="flag-icon">
+            </a>
+        </div>
+    </div>
+
+    <div class="command-output">
+        <button class="copy-button" onclick="copyCommand()">Copy</button>
+        <p id="generated-command" data-plain="sqlmap">sqlmap</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-link active" onclick="openTab(event, 'Target')">Target</button>
+        <button class="tab-link" onclick="openTab(event, 'General')">General</button>
+        <button class="tab-link" onclick="openTab(event, 'Request')">Request</button>
+        <button class="tab-link" onclick="openTab(event, 'Injection')">Injection</button>
+        <button class="tab-link" onclick="openTab(event, 'Detection')">Detection</button>
+        <button class="tab-link" onclick="openTab(event, 'Techniques')">Techniques</button>
+        <button class="tab-link" onclick="openTab(event, 'OSAccess')">OS Access</button>
+        <button class="tab-link" onclick="openTab(event, 'Tamper')">Tamper Scripts</button>
+        <button class="tab-link" onclick="openTab(event, 'Enumeration')">Enumeration</button>
+    </div>
+
+    <div id="Target" class="tab-content active">
+        <div class="form-group">
+            <label for="target-url" data-tooltip="Specify the target URL you want to analyze.">Target URL
+                (-u):</label>
+            <input type="text" id="target-url" placeholder="http://www.example.com/vuln.php?id=1">
+        </div>
+    </div>
+
+    <div id="General" class="tab-content">
+        <div class="form-group">
+            <label for="verbosity" data-tooltip="Define the verbosity level of the output.">Verbosity Level
+                (-v):</label>
+            <input type="number" id="verbosity" min="0" max="6" placeholder="Enter a value between 0 and 6">
+        </div>
+        <div class="form-group checkbox-group">
+            <label data-tooltip="Do not prompt the user, use default behavior">
+                <input type="checkbox" id="batch"> --batch (Do not prompt, default behavior)
+            </label>
+            <label data-tooltip="Remove session files for the current target">
+                <input type="checkbox" id="flush-session"> --flush-session (Remove session files)
+            </label>
+            <label data-tooltip="Wizard interface for beginner users">
+                <input type="checkbox" id="wizard"> --wizard (Wizard interface)
+            </label>
+        </div>
+    </div>
+
+    <div id="Request" class="tab-content">
+        <div class="form-group">
+            <label for="data" data-tooltip='POST data to send. Example: "id=1"'>POST Data (--data):</label>
+            <input type="text" id="data" placeholder='Example: "id=1"'>
+        </div>
+        <div class="form-group">
+            <label for="cookie" data-tooltip='HTTP Cookie to send. Example: "PHPSESSID=a8d127e..."'>HTTP Cookie
+                (--cookie):</label>
+            <input type="text" id="cookie" placeholder='Example: "PHPSESSID=a8d127e..."'>
+        </div>
+        <div class="form-group checkbox-group">
+            <label data-tooltip="Use a random HTTP User-Agent">
+                <input type="checkbox" id="random-agent"> --random-agent (Random User-Agent)
+            </label>
+            <label data-tooltip="Use the Tor anonymity network">
+                <input type="checkbox" id="tor"> --tor (Tor anonymity network)
+            </label>
+            <label data-tooltip="Check if Tor is being used correctly">
+                <input type="checkbox" id="check-tor"> --check-tor (Verify Tor usage)
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="proxy" data-tooltip='Proxy to use. Example: "http://127.0.0.1:8080"'>Proxy
+                (--proxy):</label>
+            <input type="text" id="proxy" placeholder="http://127.0.0.1:8080">
+        </div>
+    </div>
+
+    <div id="Injection" class="tab-content">
+        <div class="form-group">
+            <label for="test-parameter" data-tooltip="Parameter to test for SQL injection">Parameter to Test
+                (-p):</label>
+            <input type="text" id="test-parameter" placeholder="Example: id">
+        </div>
+        <div class="form-group">
+            <label for="dbms" data-tooltip="Force the use of a specific DBMS">Forced DBMS (--dbms):</label>
+            <input type="text" id="dbms" placeholder="Example: MySQL">
+        </div>
+    </div>
+
+    <div id="Detection" class="tab-content">
+        <div class="form-group">
+            <label for="level" data-tooltip="Define the level of tests to perform">Test Level
+                (--level):</label>
+            <input type="number" id="level" min="1" max="5" placeholder="Enter a value between 1 and 5">
+        </div>
+        <div class="form-group">
+            <label for="risk" data-tooltip="Define the risk of the tests">Test Risk (--risk):</label>
+            <input type="number" id="risk" min="1" max="3" placeholder="Enter a value between 1 and 3">
+        </div>
+    </div>
+
+    <div id="Techniques" class="tab-content">
+        <div class="form-group">
+            <label>SQL Injection Techniques (--technique):</label>
+
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="technique-B" class="technique-checkbox" value="B">
+                    <label for="technique-B">B - Boolean-based blind</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="technique-E" class="technique-checkbox" value="E">
+                    <label for="technique-E">E - Error-based</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="technique-U" class="technique-checkbox" value="U">
+                    <label for="technique-U">U - Union query-based</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="technique-S" class="technique-checkbox" value="S">
+                    <label for="technique-S">S - Stacked queries</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="technique-T" class="technique-checkbox" value="T">
+                    <label for="technique-T">T - Time-based blind</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="technique-Q" class="technique-checkbox" value="Q">
+                    <label for="technique-Q">Q - Inline queries</label>
+                </div>
+            </div>
+            <small>Select the SQL injection techniques you want to use.</small>
+        </div>
+    </div>
+
+    <div id="OSAccess" class="tab-content">
+        <div class="form-group checkbox-group">
+            <label data-tooltip="Request an interactive operating system shell">
+                <input type="checkbox" id="os-shell"> --os-shell (Interactive shell)
+            </label>
+            <label data-tooltip="Request an OOB shell, Meterpreter, or VNC">
+                <input type="checkbox" id="os-pwn"> --os-pwn (OOB shell, Meterpreter, VNC)
+            </label>
+        </div>
+    </div>
+
+    <div id="Tamper" class="tab-content">
+        <div class="form-group">
+            <label data-tooltip="Select the tamper scripts to apply">Tampering Scripts (--tamper):</label>
+            <div class="tamper-scripts">
+
+                <label data-tooltip="Replaces instances of &lt;int&gt; UNION with &lt;int&gt;e0UNION">
+                    <input type="checkbox" class="tamper" value="0eunion"> 0eunion
+                </label>
+                <label
+                    data-tooltip="Replaces the apostrophe (') character with its full-width counterpart in UTF-8 (e.g., ' -> %EF%BC%87)">
+                    <input type="checkbox" class="tamper" value="apostrophemask"> apostrophemask
+                </label>
+                <label
+                    data-tooltip="Replaces the apostrophe (') character with its illegal double Unicode counterpart (e.g., ' -> %00%27)">
+                    <input type="checkbox" class="tamper" value="apostrophenullencode"> apostrophenullencode
+                </label>
+                <label data-tooltip="Adds a NULL byte (Access) character (%00) at the end of the payload">
+                    <input type="checkbox" class="tamper" value="appendnullbyte"> appendnullbyte
+                </label>
+                <label data-tooltip="Base64 encodes all characters in a given payload">
+                    <input type="checkbox" class="tamper" value="base64encode"> base64encode
+                </label>
+                <label
+                    data-tooltip="Replaces the greater than operator ('>') with 'NOT BETWEEN 0 AND #' and the equal operator ('=') with 'BETWEEN # AND #'">
+                    <input type="checkbox" class="tamper" value="between"> between
+                </label>
+                <label data-tooltip="Injects the keyword 'binary' wherever possible">
+                    <input type="checkbox" class="tamper" value="binary"> binary
+                </label>
+                <label
+                    data-tooltip="Replaces the space character after an SQL statement with a valid random whitespace character. Then replaces the '=' character with the LIKE operator">
+                    <input type="checkbox" class="tamper" value="bluecoat"> bluecoat
+                </label>
+                <label
+                    data-tooltip="Double URL encodes all characters in a given payload (does not process already encoded) (e.g., SELECT -> %2553%2545%254C%2545%2543%2554)">
+                    <input type="checkbox" class="tamper" value="chardoubleencode"> chardoubleencode
+                </label>
+                <label
+                    data-tooltip="URL encodes all characters in a given payload (does not process already encoded) (e.g., SELECT -> %53%45%4C%45%43%54)">
+                    <input type="checkbox" class="tamper" value="charencode"> charencode
+                </label>
+                <label
+                    data-tooltip="Unicode-URL encodes all characters in a given payload (does not process already encoded) (e.g., SELECT -> %u0053%u0045%u004C%u0045%u0043%u0054)">
+                    <input type="checkbox" class="tamper" value="charunicodeencode"> charunicodeencode
+                </label>
+                <label
+                    data-tooltip="Unicode escapes the non-encoded characters in a given payload (does not process already encoded) (e.g., SELECT -> \u0053\u0045\u004C\u0045\u0043\u0054)">
+                    <input type="checkbox" class="tamper" value="charunicodeescape"> charunicodeescape
+                </label>
+                <label
+                    data-tooltip="Replaces MySQL instances like 'LIMIT M, N' with its counterpart 'LIMIT N OFFSET M'">
+                    <input type="checkbox" class="tamper" value="commalesslimit"> commalesslimit
+                </label>
+                <label
+                    data-tooltip="Replaces MySQL instances like 'MID(A, B, C)' with its counterpart 'MID(A FROM B FOR C)'">
+                    <input type="checkbox" class="tamper" value="commalessmid"> commalessmid
+                </label>
+                <label data-tooltip="Precedes an inline comment before parentheses (e.g., ( -> /**/()">
+                    <input type="checkbox" class="tamper" value="commentbeforeparentheses">
+                    commentbeforeparentheses
+                </label>
+                <label
+                    data-tooltip="Replaces MySQL instances like 'CONCAT(A, B)' with its counterpart 'CONCAT_WS(MID(CHAR(0), 0, 0), A, B)'">
+                    <input type="checkbox" class="tamper" value="concat2concatws"> concat2concatws
+                </label>
+                <label
+                    data-tooltip="HTML decimal encodes all characters (using code points) in a given payload (e.g., ' -> &#39;)">
+                    <input type="checkbox" class="tamper" value="decentities"> decentities
+                </label>
+                <label data-tooltip="Replaces instances of &lt;int&gt; UNION with &lt;int&gt;DUNION">
+                    <input type="checkbox" class="tamper" value="dunion"> dunion
+                </label>
+                <label data-tooltip="Replaces all occurrences of the equal operator ('=') with its LIKE counterpart">
+                    <input type="checkbox" class="tamper" value="equaltolike"> equaltolike
+                </label>
+                <label data-tooltip="Replaces all occurrences of the equal operator ('=') with its RLIKE counterpart">
+                    <input type="checkbox" class="tamper" value="equaltorlike"> equaltorlike
+                </label>
+                <label data-tooltip="Escapes single and double quotes with a backslash (e.g., ' -> \')">
+                    <input type="checkbox" class="tamper" value="escapequotes"> escapequotes
+                </label>
+                <label data-tooltip="Replaces the greater than operator ('>') with its GREATEST counterpart">
+                    <input type="checkbox" class="tamper" value="greatest"> greatest
+                </label>
+                <label data-tooltip="Adds a versioned MySQL comment before each keyword">
+                    <input type="checkbox" class="tamper" value="halfversionedmorekeywords">
+                    halfversionedmorekeywords
+                </label>
+                <label
+                    data-tooltip="Replaces each MySQL hexadecimal encoded string 0x&lt;hex&gt; with its equivalent CONCAT(CHAR(),...) counterpart">
+                    <input type="checkbox" class="tamper" value="hex2char"> hex2char
+                </label>
+                <label
+                    data-tooltip="HTML hexadecimal encodes all characters (using code points) in a given payload (e.g., ' -> &#x31;)">
+                    <input type="checkbox" class="tamper" value="hexentities"> hexentities
+                </label>
+                <label
+                    data-tooltip="HTML encodes all non-alphanumeric characters (using code points) in a given payload (e.g., ' -> &#39;)">
+                    <input type="checkbox" class="tamper" value="htmlencode"> htmlencode
+                </label>
+                <label
+                    data-tooltip="Replaces instances like 'IF(A, B, C)' with its counterpart 'CASE WHEN (A) THEN (B) ELSE (C) END'">
+                    <input type="checkbox" class="tamper" value="if2case"> if2case
+                </label>
+                <label
+                    data-tooltip="Replaces instances like 'IFNULL(A, B)' with its counterpart 'CASE WHEN ISNULL(A) THEN (B) ELSE (A) END'">
+                    <input type="checkbox" class="tamper" value="ifnull2casewhenisnull"> ifnull2casewhenisnull
+                </label>
+                <label data-tooltip="Replaces instances like 'IFNULL(A, B)' with its counterpart 'IF(ISNULL(A), B, A)'">
+                    <input type="checkbox" class="tamper" value="ifnull2ifisnull"> ifnull2ifisnull
+                </label>
+                <label
+                    data-tooltip="Adds an inline comment (/**/) at the end of all occurrences of the MySQL identifier 'information_schema'">
+                    <input type="checkbox" class="tamper" value="informationschemacomment">
+                    informationschemacomment
+                </label>
+                <label data-tooltip="Replaces the greater than operator ('>') with its LEAST counterpart">
+                    <input type="checkbox" class="tamper" value="least"> least
+                </label>
+                <label data-tooltip="Replaces each keyword character with its lowercase value (e.g., SELECT -> select)">
+                    <input type="checkbox" class="tamper" value="lowercase"> lowercase
+                </label>
+                <label data-tooltip="Bypass LUA-Nginx WAFs (e.g., Cloudflare)">
+                    <input type="checkbox" class="tamper" value="luanginx"> luanginx
+                </label>
+                <label data-tooltip="Replaces instances of UNION with -.1UNION">
+                    <input type="checkbox" class="tamper" value="misunion"> misunion
+                </label>
+                <label data-tooltip="Encloses the entire query with a versioned MySQL comment">
+                    <input type="checkbox" class="tamper" value="modsecurityversioned"> modsecurityversioned
+                </label>
+                <label data-tooltip="Encloses the entire query with a zero-versioned MySQL comment">
+                    <input type="checkbox" class="tamper" value="modsecurityzeroversioned">
+                    modsecurityzeroversioned
+                </label>
+                <label data-tooltip="Adds multiple spaces (' ') around SQL keywords">
+                    <input type="checkbox" class="tamper" value="multiplespaces"> multiplespaces
+                </label>
+                <label data-tooltip="Replaces occurrences of ORD() with equivalent ASCII() calls">
+                    <input type="checkbox" class="tamper" value="ord2ascii"> ord2ascii
+                </label>
+                <label
+                    data-tooltip="Converts all characters (non-alphanumeric) in a given payload to overlong UTF8 (does not process already encoded) (e.g., ' -> %C0%A7)">
+                    <input type="checkbox" class="tamper" value="overlongutf8"> overlongutf8
+                </label>
+                <label
+                    data-tooltip="Converts all characters in a given payload to overlong UTF8 (does not process already encoded) (e.g., SELECT -> %C1%93%C1%85%C1%8C%C1%85%C1%83%C1%94)">
+                    <input type="checkbox" class="tamper" value="overlongutf8more"> overlongutf8more
+                </label>
+                <label data-tooltip="Adds a percentage sign ('%') before each character (e.g., SELECT -> %S%E%L%E%C%T)">
+                    <input type="checkbox" class="tamper" value="percentage"> percentage
+                </label>
+                <label data-tooltip="Replaces the plus operator ('+') with the MsSQL CONCAT() function">
+                    <input type="checkbox" class="tamper" value="plus2concat"> plus2concat
+                </label>
+                <label data-tooltip="Replaces the plus operator ('+') with the MsSQL ODBC {fn CONCAT()} function">
+                    <input type="checkbox" class="tamper" value="plus2fnconcat"> plus2fnconcat
+                </label>
+                <label data-tooltip="Replaces each keyword character with a random case value (e.g., select -> SEleCt)">
+                    <input type="checkbox" class="tamper" value="randomcase"> randomcase
+                </label>
+                <label data-tooltip="Adds random inline comments within SQL keywords (e.g., SELECT -> S/**/E/**/LECT)">
+                    <input type="checkbox" class="tamper" value="randomcomments"> randomcomments
+                </label>
+                <label
+                    data-tooltip="Splits FROM schema identifiers (e.g., 'testdb.users') with whitespace (e.g., 'testdb 9.e.users')">
+                    <input type="checkbox" class="tamper" value="schemasplit"> schemasplit
+                </label>
+                <label data-tooltip="Abuses MySQL scientific notation">
+                    <input type="checkbox" class="tamper" value="scientific"> scientific
+                </label>
+                <label data-tooltip="Replaces instances like 'SLEEP(5)' with, for example, 'GET_LOCK('ETgP',5)'">
+                    <input type="checkbox" class="tamper" value="sleep2getlock"> sleep2getlock
+                </label>
+                <label
+                    data-tooltip="Adds the MsSQL 'sp_password' function at the end of the payload for automatic obfuscation in DBMS logs">
+                    <input type="checkbox" class="tamper" value="sp_password"> sp_password
+                </label>
+                <label data-tooltip="Replaces the space character (' ') with '/**/' comments">
+                    <input type="checkbox" class="tamper" value="space2comment"> space2comment
+                </label>
+                <label
+                    data-tooltip="Replaces the space character (' ') with a dash comment ('--') followed by a random string and a new line ('\n')">
+                    <input type="checkbox" class="tamper" value="space2dash"> space2dash
+                </label>
+                <label
+                    data-tooltip="Replaces MySQL space instances (' ') with a pound character ('#') followed by a random string and a new line ('\n')">
+                    <input type="checkbox" class="tamper" value="space2hash"> space2hash
+                </label>
+                <label data-tooltip="Replaces MySQL space instances (' ') with '/**_**/' comments">
+                    <input type="checkbox" class="tamper" value="space2morecomment"> space2morecomment
+                </label>
+                <label
+                    data-tooltip="Replaces MySQL space instances (' ') with a pound character ('#') followed by a random string and a new line ('\n')">
+                    <input type="checkbox" class="tamper" value="space2morehash"> space2morehash
+                </label>
+                <label
+                    data-tooltip="Replaces MsSQL space instances (' ') with a random whitespace character from a valid set of alternative characters">
+                    <input type="checkbox" class="tamper" value="space2mssqlblank"> space2mssqlblank
+                </label>
+                <label
+                    data-tooltip="Replaces the space character (' ') with a pound character ('#') followed by a new line ('\n')">
+                    <input type="checkbox" class="tamper" value="space2mssqlhash"> space2mssqlhash
+                </label>
+                <label
+                    data-tooltip="Replaces MySQL space instances (' ') with a random whitespace character from a valid set of alternative characters">
+                    <input type="checkbox" class="tamper" value="space2mysqlblank"> space2mysqlblank
+                </label>
+                <label
+                    data-tooltip="Replaces the space character (' ') with a dash comment ('--') followed by a new line ('\n')">
+                    <input type="checkbox" class="tamper" value="space2mysqldash"> space2mysqldash
+                </label>
+                <label data-tooltip="Replaces the space character (' ') with a plus sign ('+')">
+                    <input type="checkbox" class="tamper" value="space2plus"> space2plus
+                </label>
+                <label
+                    data-tooltip="Replaces the space character (' ') with a random whitespace character from a valid set of alternative characters">
+                    <input type="checkbox" class="tamper" value="space2randomblank"> space2randomblank
+                </label>
+                <label data-tooltip="Replaces PostgreSQL SUBSTRING with LEFT and RIGHT">
+                    <input type="checkbox" class="tamper" value="substring2leftright"> substring2leftright
+                </label>
+                <label
+                    data-tooltip="Replaces logical operators AND and OR with their symbolic counterparts (&& and ||)">
+                    <input type="checkbox" class="tamper" value="symboliclogical"> symboliclogical
+                </label>
+                <label data-tooltip="Replaces instances of UNION ALL SELECT with its UNION SELECT counterpart">
+                    <input type="checkbox" class="tamper" value="unionalltounion"> unionalltounion
+                </label>
+                <label
+                    data-tooltip="Replaces the quote character (') with a multibyte combination %BF%27 along with a generic comment at the end to make it work">
+                    <input type="checkbox" class="tamper" value="unmagicquotes"> unmagicquotes
+                </label>
+                <label data-tooltip="Replaces each keyword character with its uppercase value (e.g., select -> SELECT)">
+                    <input type="checkbox" class="tamper" value="uppercase"> uppercase
+                </label>
+                <label data-tooltip="Adds an 'X-originating-IP' HTTP header to bypass the Varnish Firewall">
+                    <input type="checkbox" class="tamper" value="varnish"> varnish
+                </label>
+                <label data-tooltip="Encloses each non-functional keyword with a versioned MySQL comment">
+                    <input type="checkbox" class="tamper" value="versionedkeywords"> versionedkeywords
+                </label>
+                <label data-tooltip="Encloses each keyword with a versioned MySQL comment">
+                    <input type="checkbox" class="tamper" value="versionedmorekeywords"> versionedmorekeywords
+                </label>
+                <label data-tooltip="Adds a fake 'X-Forwarded-For' (and similar) HTTP header">
+                    <input type="checkbox" class="tamper" value="xforwardedfor"> xforwardedfor
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div id="Enumeration" class="tab-content">
+        <div class="form-group checkbox-group">
+            <label data-tooltip="Retrieve all options">
+                <input type="checkbox" id="all"> -a, --all (Retrieve all)
+            </label>
+            <label data-tooltip="Retrieve the DBMS banner">
+                <input type="checkbox" id="banner"> -b, --banner (Retrieve banner)
+            </label>
+            <label data-tooltip="Retrieve the current DBMS user">
+                <input type="checkbox" id="current-user"> --current-user (Retrieve current user)
+            </label>
+            <label data-tooltip="Retrieve the current DBMS database">
+                <input type="checkbox" id="current-db"> --current-db (Retrieve current database)
+            </label>
+            <label data-tooltip="Enumerate DBMS user password hashes">
+                <input type="checkbox" id="passwords"> --passwords (Enumerate password hashes)
+            </label>
+            <label data-tooltip="Enumerate DBMS databases">
+                <input type="checkbox" id="dbs"> --dbs (Enumerate databases)
+            </label>
+            <label data-tooltip="Enumerate DBMS database tables">
+                <input type="checkbox" id="tables"> --tables (Enumerate tables)
+            </label>
+            <label data-tooltip="Enumerate DBMS table columns">
+                <input type="checkbox" id="columns"> --columns (Enumerate columns)
+            </label>
+            <label data-tooltip="Enumerate the DBMS schema">
+                <input type="checkbox" id="schema"> --schema (Enumerate schema)
+            </label>
+            <label data-tooltip="Dump DBMS database table entries">
+                <input type="checkbox" id="dump"> --dump (Dump table entries)
+            </label>
+            <label data-tooltip="Dump all entries from all tables of all DBMS databases">
+                <input type="checkbox" id="dump-all"> --dump-all (Dump all)
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="db" data-tooltip="Specify the database to enumerate">Database to Enumerate
+                (-D):</label>
+            <input type="text" id="db" placeholder="Example: db_name">
+        </div>
+        <div class="form-group">
+            <label for="tbl" data-tooltip="Specify the tables to enumerate">Table(s) to Enumerate (-T):</label>
+            <input type="text" id="tbl" placeholder="Example: table_name">
+        </div>
+        <div class="form-group">
+            <label for="col" data-tooltip="Specify the columns to enumerate">Column(s) to Enumerate (-C):</label>
+            <input type="text" id="col" placeholder="Example: column_name">
+        </div>
+    </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Developed by <a href="https://www.linkedin.com/in/taurusomar/" target="_blank">
+                    <strong>Omar Salazar</strong></a> | Version <strong>1.0</strong></p>
+        </div>
+    </footer>
+
+    <div id="notification" class="notification"></div>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
